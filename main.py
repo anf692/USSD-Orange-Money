@@ -306,12 +306,14 @@ def Annuler_transfert():
 
 #fonction pour les historiques
 def Historiques():
-    print("\n--- Historique ---")
+    print("\n--- Historique des transactions ---")
 
-    if not historiques:
+    historique = charger_historique()
+
+    if not historique:
         print("Aucune opération effectuée.")
     else:
-        for i, action in enumerate(historiques):
+        for i, action in enumerate(historique, start=1):
             print(f"{i}. {action}")
 
 
