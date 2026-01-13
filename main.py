@@ -199,7 +199,30 @@ def Forfaits_internet():
         else:
             print("Choix invalide !!!")
 
+#fonction pour annuler le dernier transfere   
+def Annuler_transfert():
+    global solde
+    
+    #Vérifier si l'historique contient des données
+    if not historique_soldes:
+        print("Aucun transfert à annuler dans l'historique.")
+        return
 
+    # Demander confirmation
+    if confirmation("Voulez-vous vraiment annuler le transfert ?"):
+        
+        #Vérifier le code secret
+        if not Code_secret():
+            # Récupérer et retirer le dernier solde de la pile
+            solde_precedent = historique_soldes.pop() 
+            solde = solde_precedent
+            print(f"Annulation réussie. Solde restauré à : {solde} FCFA")
+            historiques.append(f"Annulation de transfere : solde = {solde_precedent} FCFA")
+        
+        else:
+            print("Erreur : Code secret incorrect. Annulation annulée.")
+
+            
 
 #Programme principal
 Code_ussd()
