@@ -10,3 +10,14 @@ def Code_ussd():
             break
         else:
             print("Code invalide!!!!")
+
+
+#fonction pour afficher le menu principal
+def Affichage_menu():
+    print("\n=========Menu Principal==========\n")
+    print("1. Consulter le solde")
+    print("2. Acheter du crédit")
+    print("3. Effectuer un transfert") 
+    print("4. Historique des transferts") 
+    print("0. Quitter ?")
+    
