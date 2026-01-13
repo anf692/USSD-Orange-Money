@@ -211,14 +211,6 @@ def Effectuer_transfert():
 
 #fonction pour les achats de forfait internet
 def Forfaits_internet():
-    global solde 
-    global historiques 
-
-    forfait = {
-        "1": (500, "100 Mo"),
-        "2": (1000, "500 Mo"),
-        "3": (2000, "1 Go")
-    }
 
     print("\n--- Forfaits Internet ---")
     print("1. 100 Mo - 500 FCFA")
@@ -227,32 +219,60 @@ def Forfaits_internet():
     print("0. Retour")
     
     while True:
-        choix = input("Entrez votre option: ")
+    
+        choix=input("Entrez votre option: ")
 
+        # on creer une dictionnaire de forfait disponible
+        forfait={
+            "1":(500, "100 Mo"),
+            "2":(1000, "500 Mo"),
+            "3":(2000, "1 Go")
+        }
+        
+        #si le choix == 0 on retour au menu
         if choix == "0":
             return
 
+        #on verifie si le choix est dans le dictionnaire
         if choix in forfait:
             prix, nom = forfait[choix]
-
-            if solde < prix:
-                print(f"Solde insuffisant ({solde} FCFA restants).")
-                continue 
+            
+            try:
+                #on lis et le fichier
+                with open(SOLDE_INITIALE, "r") as f:
+                    donnees = json.load(f)
+                    
+            except (FileNotFoundError, json.JSONDecodeError, KeyError):
+                print("Erreur : Iempossible de lire le solde.")
+                return
+    
+            #verification du solde s'il est suffisant
+            if donnees['solde'] < prix:
+                print("Solde insuffisant")
+                return
 
             # Appel de la fonction de confirmation
-            if confirmation(f"Voulez-vous acheter {nom} pour {prix} FCFA ?"):
+            if confirmation(f"Voulez-vous Acheter {nom} pour {prix} FCFA ?"):
+                #on verifie si le pwd est correct et on decremente
                 if Code_secret():
-                    solde -= prix
-                    historiques.append(f"Achat Internet : {nom} (-{prix} FCFA)")
+                    donnees['solde'] -= prix
+                    
+                    # Mise à jour du solde
+                    with open(SOLDE_INITIALE, "w") as f:
+                        json.dump(donnees, f, indent=4)
+                
+                    #ajout de l'action dans la liste des historiques
+                    ajouter_historique(f"Achat Internet : {nom} (-{prix} FCFA)")
                     print(f"\n Forfait {nom} activé avec succès !")
-                    return 
+                    return
                 else:
                     print(" Échec : Code secret incorrect.")
-
+                    
             else:
                 print("Annulation de l'achat.")
+                
         else:
-            print("Choix invalide !!!")
+            print("Choix invalide!!!")
 
 #fonction pour annuler le dernier transfere   
 def Annuler_transfert():
