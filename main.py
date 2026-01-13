@@ -132,4 +132,13 @@ def Effectuer_transfert():
         else:
             print("Choix invalide !!!")
 
+#fonction pour les historiques
+def Historiques():
+    print("\n--- Historique ---")
+
+    if not historiques:
+        print("Aucune opération effectuée.")
+    else:
+        for i, action in enumerate(historiques):
+            print(f"{i}. {action}")
 
