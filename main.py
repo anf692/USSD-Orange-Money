@@ -68,3 +68,68 @@ def Acheter_crédit():
         
         else:
             print("Montant incorrect!!!")
+
+
+#fonction pour les transferes
+def Effectuer_transfert():
+    global solde 
+
+    print("\n--- Services ---")
+    print("1. Transfert National")
+    print("2. Transfert internationale")
+    print("0. Retour")
+    
+    while True:
+        choix = input("Choisissez une option : ").strip()
+        
+        if choix == '0':
+            return # Sort de la fonction et revient au menu principal
+
+        if choix in ('1', '2'):
+            while True:
+                numero_beneficiaire = input("Entrez le numero du beneficiaire : ").strip()
+                montant_saisie = input("Entrez le montant a envoyer : ").strip()
+                
+                # --- Gestion du numéro sénégalais ---
+                if numero_beneficiaire.startswith("+221"):
+                    numero_beneficiaire = numero_beneficiaire.replace("+221", "")
+
+                #Valider que les entrées sont bien des chiffres
+                if not numero_beneficiaire.isnumeric() or not montant_saisie.isnumeric():
+                    print("Erreur : Veuillez saisir uniquement des chiffres pour le numéro et le montant.")
+                    continue
+
+
+                montant = int(montant_saisie)
+
+                #Validation de la longueur du numéro (ex: 9 chiffres pour le SN)
+                if len(numero_beneficiaire) != 9: 
+                    print("Erreur : Le numéro de bénéficiaire doit comporter 9 chiffres.")
+                    continue
+
+                #Validation du solde
+                if solde < montant:
+                    print(f"Solde insuffisant. Votre solde actuel est de {solde} FCFA.")
+                    continue
+
+                # --- PROCESSUS DE TRANSFERT ---
+                if choix == '1':
+                    message = f"Voulez-vous effectuer un transfert national de {montant} FCFA au +221 {numero_beneficiaire} ?"
+                else: 
+                    message = f"Voulez-vous effectuer un transfert international de {montant} FCFA a {numero_beneficiaire} ?"
+
+                # Appel de la fonction de confirmation
+                if confirmation(message):
+                    solde -= montant
+                    print(f"\nFélicitations !! Envoi effectué. Votre nouveau solde est {solde} FCFA")
+                    #ajout de l'action dans liste des historiques
+                    historiques.append(f"Vous avez envoier {montant} FCFA a {numero_beneficiaire}")
+                    return # Transaction terminée, sortie de la fonction
+                else:
+                    print("Transaction annulée.")
+                    return
+
+        else:
+            print("Choix invalide !!!")
+
+
