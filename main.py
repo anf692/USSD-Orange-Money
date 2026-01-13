@@ -11,13 +11,26 @@ def initialiser_solde():
     if not os.path.exists(SOLDE_INITIALE):
         with open(SOLDE_INITIALE, "w") as f:
             json.dump({"solde": 5000}, f, indent=4)
-    
-    
+       
 #fontion pour initialiser la fichier pour les historiques
 def initialiser_historique():
     if not os.path.exists(FICHIER_HISTORIQUE):
         with open(FICHIER_HISTORIQUE, "w") as f:
             json.dump({"historiques": []}, f, indent=4)
+
+#fontion pour charger la liste      
+def charger_historique():
+    initialiser_historique()
+    with open(FICHIER_HISTORIQUE, "r") as f:
+        return json.load(f)["historiques"]
+   
+#fontion pour ajouter un historique
+def ajouter_historique(message):
+    historique = charger_historique()
+    historique.append(message)
+
+    with open(FICHIER_HISTORIQUE, "w") as f:
+        json.dump({"historiques": historique}, f, indent=4)
 
 #fonction pour la saisie du code ussd
 def Code_ussd():
