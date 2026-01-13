@@ -321,6 +321,9 @@ def Historiques():
 Code_ussd()
 
 while True:
+    initialiser_solde()
+    initialiser_historique()
+    
     Affichage_menu()
     choix = input("Entrez votre choix : ").strip()
     
