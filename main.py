@@ -142,3 +142,24 @@ def Historiques():
         for i, action in enumerate(historiques):
             print(f"{i}. {action}")
 
+
+#Programme principal
+Code_ussd()
+
+while True:
+    Affichage_menu()
+    choix = input("Entrez votre choix : ").strip()
+    
+    if choix == "1":
+        Consulter_solde()
+    elif choix == "2":
+        Acheter_crédit()
+    elif choix == "3":
+        Effectuer_transfert()
+    elif choix == "4":
+        Historiques()
+    elif choix == "0":
+        print("\nMerci d'avoir utilisé Orange Money 🇸🇳")
+        break
+    else:
+        print("Choix invalide")
