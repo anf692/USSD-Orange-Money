@@ -21,3 +21,19 @@ def Affichage_menu():
     print("4. Historique des transferts") 
     print("0. Quitter ?")
     
+
+#fonction pour gerer les confirmations et retour au precedent
+def confirmation(message):
+    print("\n" + message)
+    print("1. Confirmer")
+    print("2. Annuler")
+
+    while True:
+        choix = input("Votre choix : ")
+        
+        if choix == "1":
+            return  True
+        elif choix == "2":
+            return False
+        else:
+            print("Incorrect")
