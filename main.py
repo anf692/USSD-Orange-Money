@@ -83,8 +83,9 @@ def confirmation(message):
 
 #fonction pour afficher le solde
 def Consulter_solde():
-    global solde
-    print(f"\nVotre solde actuel est egale a : {solde} FCFA")
+    with open(SOLDE_INITIALE, "r") as f:
+        data=  json.load(f)
+        print(f"\nVotre solde actuel est egale a : {data['solde']} FCFA")
 
 #fonction pour l'achat de credit
 def Acheter_crédit():
