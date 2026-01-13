@@ -135,7 +135,6 @@ def Acheter_crédit():
 
 #fonction pour les transferes
 def Effectuer_transfert():
-    global solde 
 
     print("\n--- Services ---")
     print("1. Transfert National")
@@ -146,8 +145,9 @@ def Effectuer_transfert():
         choix = input("Choisissez une option : ").strip()
         
         if choix == '0':
-            return # Sort de la fonction et revient au menu principal
+            return 
 
+        #verifie s'il a choisi 1 ou 2
         if choix in ('1', '2'):
             while True:
                 numero_beneficiaire = input("Entrez le numero du beneficiaire : ").strip()
@@ -158,21 +158,31 @@ def Effectuer_transfert():
                     print("Erreur : Veuillez saisir uniquement des chiffres pour le numéro et le montant.")
                     continue
 
-
+                #on fait la convertion du montant
                 montant = int(montant_saisie)
 
                 #Validation de la longueur du numéro (ex: 9 chiffres pour le SN)
                 if len(numero_beneficiaire) != 9: 
                     print("Erreur : Le numéro de bénéficiaire doit comporter 9 chiffres.")
                     continue
+                    
+                try:
+                    #on lis et le fichier
+                    with open(SOLDE_INITIALE, "r") as f:
+                        donnees = json.load(f)
+                        
+                except (FileNotFoundError, json.JSONDecodeError, KeyError):
+                    print("Erreur : Impossible de lire le solde.")
+                    return
 
                 #Validation du solde
-                if solde < montant:
-                    print(f"Solde insuffisant. Votre solde actuel est de {solde} FCFA.")
+                if donnees['solde'] < montant:
+                    print(f"Solde insuffisant. Votre solde actuel est de {donnees['solde']} FCFA.")
                     continue
                     
                 else:
-                    historique_soldes.append(solde)
+                    
+                    historique_soldes.append(donnees['solde'])
                     
                     # --- PROCESSUS DE TRANSFERT ---
                     if choix == '1':
@@ -182,11 +192,16 @@ def Effectuer_transfert():
 
                     # Appel de la fonction de confirmation
                     if confirmation(message):
-                        solde -= montant
-                        print(f"\nFélicitations !! Envoi effectué. Votre nouveau solde est {solde} FCFA")
+                        donnees['solde'] -= montant
+                        
+                        # Mise à jour du solde
+                        with open(SOLDE_INITIALE, "w") as f:
+                            json.dump(donnees, f, indent=4)
+                            
+                        print(f"\nFélicitations !! Envoi effectué. Votre nouveau solde est {donnees['solde']} FCFA")
                         #ajout de l'action dans liste des historiques
-                        historiques.append(f"Vous avez envoier {montant} FCFA a {numero_beneficiaire}")
-                        return # Transaction terminée, sortie de la fonction
+                        ajouter_historique(f"Vous avez envoyé {montant} FCFA à {numero_beneficiaire}")
+                        return 
                     else:
                         print("Transaction annulée.")
                         return
