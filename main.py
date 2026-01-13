@@ -13,6 +13,17 @@ def Code_ussd():
         else:
             print("Code invalide!!!!")
 
+#fonction pour le code secret
+def Code_secret():
+    tentatives = 3
+    while tentatives > 0:
+        pin = input(f"Entrez votre code secret ({tentatives} essais restants): ")
+        if pin == '1234':
+            return True 
+        else:
+            tentatives -= 1
+            print("Code invalide!!!!")
+    return False
 
 #fonction pour afficher le menu principal
 def Affichage_menu():
@@ -141,6 +152,53 @@ def Historiques():
     else:
         for i, action in enumerate(historiques):
             print(f"{i}. {action}")
+
+
+#fonction pour les achats de forfait internet
+def Forfaits_internet():
+    global solde 
+    global historiques 
+
+    forfait = {
+        "1": (500, "100 Mo"),
+        "2": (1000, "500 Mo"),
+        "3": (2000, "1 Go")
+    }
+
+    print("\n--- Forfaits Internet ---")
+    print("1. 100 Mo - 500 FCFA")
+    print("2. 500 Mo - 1000 FCFA")
+    print("3. 1 Go - 2000 FCFA")
+    print("0. Retour")
+    
+    while True:
+        choix = input("Entrez votre option: ")
+
+        if choix == "0":
+            return
+
+        if choix in forfait:
+            prix, nom = forfait[choix]
+
+            if solde < prix:
+                print(f"Solde insuffisant ({solde} FCFA restants).")
+                continue 
+
+            # Appel de la fonction de confirmation
+            if confirmation(f"Voulez-vous acheter {nom} pour {prix} FCFA ?"):
+                if Code_secret():
+                    solde -= prix
+                    historiques.append(f"Achat Internet : {nom} (-{prix} FCFA)")
+                    print(f"\n Forfait {nom} activé avec succès !")
+                    return 
+                else:
+                    print(" Échec : Code secret incorrect.")
+
+            else:
+                print("Annulation de l'achat.")
+        else:
+            print("Choix invalide !!!")
+
 
 
 #Programme principal
