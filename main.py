@@ -81,7 +81,6 @@ def Acheter_crédit():
         else:
             print("Montant incorrect!!!")
 
-
 #fonction pour les transferes
 def Effectuer_transfert():
     global solde 
@@ -142,17 +141,6 @@ def Effectuer_transfert():
 
         else:
             print("Choix invalide !!!")
-
-#fonction pour les historiques
-def Historiques():
-    print("\n--- Historique ---")
-
-    if not historiques:
-        print("Aucune opération effectuée.")
-    else:
-        for i, action in enumerate(historiques):
-            print(f"{i}. {action}")
-
 
 #fonction pour les achats de forfait internet
 def Forfaits_internet():
@@ -222,7 +210,16 @@ def Annuler_transfert():
         else:
             print("Erreur : Code secret incorrect. Annulation annulée.")
 
-            
+#fonction pour les historiques
+def Historiques():
+    print("\n--- Historique ---")
+
+    if not historiques:
+        print("Aucune opération effectuée.")
+    else:
+        for i, action in enumerate(historiques):
+            print(f"{i}. {action}")
+
 
 #Programme principal
 Code_ussd()
@@ -238,6 +235,10 @@ while True:
     elif choix == "3":
         Effectuer_transfert()
     elif choix == "4":
+        Forfaits_internet()
+    elif choix == "5":
+        Annuler_transfert()
+    elif choix == "6":
         Historiques()
     elif choix == "0":
         print("\nMerci d'avoir utilisé Orange Money 🇸🇳")
