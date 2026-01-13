@@ -89,28 +89,49 @@ def Consulter_solde():
 
 #fonction pour l'achat de credit
 def Acheter_crédit():
-    global solde
-    
     while True:
-        montant_saisie= input("Entrez le montant a acheter: ")
+        montant_saisie = input("Entrez le montant à acheter (ou 'q' pour quitter) : ").strip()
         
-        if montant_saisie.replace(" ", "").isnumeric():
+        if montant_saisie.lower() == 'q':
+            break
+
+        #verification pour entrer
+        if montant_saisie.isnumeric():
+            montant = int(montant_saisie)
             
-            montant= int(montant_saisie)
-            if solde < montant:
-                print("Solde insuffisant")
+            try:
+                #on lis et le fichier
+                with open(SOLDE_INITIALE, "r") as f:
+                    donnees = json.load(f)
+                    
+            except (FileNotFoundError, json.JSONDecodeError, KeyError):
+                print("Erreur : Impossible de lire le solde.")
                 return
-        
-            #verification et appel a la fonction confirmation pour voir s'il a 'confirmer' ou 'annuler'
-            if confirmation(f"Voulez-vous  achater {montant} de credit? "):
-                solde -= montant
-                #ajout de l'action dans liste des historiques
-                historiques.append(f"Vous avez acheter {montant} FCFA de credit")
-                print(f"\nFelication!!! compte recharger. Votre nouveux solde est {solde} FCFA ")
-            return
-        
+
+            #verifie si le solte est inferieur au montant
+            if donnees['solde'] < montant:
+                print(f"Solde insuffisant (Solde actuel : {donnees['solde']} FCFA)")
+                return
+
+            #on appel la fonction confirmation()
+            if confirmation(f"Voulez-vous acheter {montant} FCFA de crédit ?"):
+                donnees['solde'] -= montant
+                
+                # Mise à jour du solde
+                with open(SOLDE_INITIALE, "w") as f:
+                    json.dump(donnees, f, indent=4)
+                
+                # Mise à jour de l'historique
+                ajouter_historique(f"Achat de {montant} FCFA de crédit")
+                
+                print(f"\nFélicitations !!! Crédit acheté.")
+                print(f"Votre nouveau solde est : {donnees['solde']} FCFA")
+                return
+            else:
+                print("Transaction annulée.")
+                return
         else:
-            print("Montant incorrect!!!")
+            print("Erreur : Veuillez saisir un montant valide (chiffres uniquement).")
 
 #fonction pour les transferes
 def Effectuer_transfert():
