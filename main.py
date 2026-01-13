@@ -1,6 +1,10 @@
-solde=5000
-historiques=[]
+import os
+import json
+
 historique_soldes = []
+
+FICHIER_HISTORIQUE = "historique.json"
+SOLDE_INITIALE = "solde.json"
 
 #fonction pour la saisie du code ussd
 def Code_ussd():
