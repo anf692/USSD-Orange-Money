@@ -276,9 +276,11 @@ def Forfaits_internet():
 
 #fonction pour annuler le dernier transfere   
 def Annuler_transfert():
-    global solde
     
-    #Vérifier si l'historique contient des données
+    with open(SOLDE_INITIALE, "r") as f:
+        donnees = json.load(f)
+
+    # Vérifier si l'historique contient des données
     if not historique_soldes:
         print("Aucun transfert à annuler dans l'historique.")
         return
@@ -286,16 +288,21 @@ def Annuler_transfert():
     # Demander confirmation
     if confirmation("Voulez-vous vraiment annuler le transfert ?"):
         
-        #Vérifier le code secret
-        if not Code_secret():
+        if Code_secret():
             # Récupérer et retirer le dernier solde de la pile
-            solde_precedent = historique_soldes.pop() 
-            solde = solde_precedent
-            print(f"Annulation réussie. Solde restauré à : {solde} FCFA")
-            historiques.append(f"Annulation de transfere : solde = {solde_precedent} FCFA")
-        
+            solde_precedent = historique_soldes.pop()
+            donnees['solde'] = solde_precedent
+            
+            # Mise à jour du solde
+            with open(SOLDE_INITIALE, "w") as f:
+                json.dump(donnees, f, indent=4)
+            
+            print(f"Annulation réussie. Solde restauré à : {donnees['solde']} FCFA")
+            ajouter_historique(f"Annulation de transfert : solde restauré à {solde_precedent} FCFA")
         else:
-            print("Erreur : Code secret incorrect. Annulation annulée.")
+            print("Erreur : Code secret incorrect. Annulation avortée.")
+    else:
+        print("Action annulée par l'utilisateur.")
 
 #fonction pour les historiques
 def Historiques():
