@@ -6,6 +6,19 @@ historique_soldes = []
 FICHIER_HISTORIQUE = "historique.json"
 SOLDE_INITIALE = "solde.json"
 
+#fontion pour initialiser le solde
+def initialiser_solde():
+    if not os.path.exists(SOLDE_INITIALE):
+        with open(SOLDE_INITIALE, "w") as f:
+            json.dump({"solde": 5000}, f, indent=4)
+    
+    
+#fontion pour initialiser la fichier pour les historiques
+def initialiser_historique():
+    if not os.path.exists(FICHIER_HISTORIQUE):
+        with open(FICHIER_HISTORIQUE, "w") as f:
+            json.dump({"historiques": []}, f, indent=4)
+
 #fonction pour la saisie du code ussd
 def Code_ussd():
     while True:
