@@ -61,7 +61,9 @@ def Affichage_menu():
     print("1. Consulter le solde")
     print("2. Acheter du crédit")
     print("3. Effectuer un transfert") 
-    print("4. Historique des transferts") 
+    print("4. Achat de fortait internet") 
+    print("5. Annuler un transfere") 
+    print("6. Historique des transactions") 
     print("0. Quitter ?")
     
 
