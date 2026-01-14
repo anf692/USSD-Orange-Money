@@ -44,14 +44,13 @@ Les fichiers `solde.json` et `historique.json` sont **créés automatiquement** 
 
 ## Structure des fichiers JSON
 
-### solde.json
+### solde.json et historique.json
 ```json
 {
     "solde": 5000
 }
 
-### historique.json
-```json
+
 {
     "historiques": [
         "Achat de 1000 FCFA de crédit",
