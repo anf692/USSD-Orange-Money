@@ -42,6 +42,11 @@ Les fichiers `solde.json` et `historique.json` sont **créés automatiquement** 
 
 ---
 
+# NB: 
+dans le github regarde les tag avec les differentes version du projet
+
+---
+
 ## Structure des fichiers JSON
 
 ### solde.json et historique.json
@@ -58,6 +63,3 @@ Les fichiers `solde.json` et `historique.json` sont **créés automatiquement** 
     ]
 }
 
----
-# NB: 
-dans le github regarde les tag avec les differentes version du projet
