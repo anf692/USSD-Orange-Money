@@ -8,9 +8,23 @@ SOLDE_INITIALE = "solde.json"
 
 #fontion pour initialiser le solde
 def initialiser_solde():
-    if not os.path.exists(SOLDE_INITIALE):
+    try:
+        if not os.path.exists(SOLDE_INITIALE):
+            #on provoque volontairement une erreur
+            raise FileNotFoundError
+
+        with open(SOLDE_INITIALE, "r") as f:
+            data = json.load(f)
+
+        # Vérifier que la clé solde existe
+        if "solde" not in data:
+            #on provoque volontairement une erreur
+            raise KeyError
+
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
         with open(SOLDE_INITIALE, "w") as f:
             json.dump({"solde": 5000}, f, indent=4)
+
        
 #fontion pour initialiser la fichier pour les historiques
 def initialiser_historique():
